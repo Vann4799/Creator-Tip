@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { TipHistory } from '@/components/TipHistory';
 import { Leaderboard } from '@/components/Leaderboard';
+import { GoalForm } from '@/components/GoalForm';
 import { supabase, Creator } from '@/lib/supabase';
 
 export default function DashboardPage() {
@@ -104,6 +105,11 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
+
+            {/* Smart Contract Goal Form */}
+            <section className="max-w-xl">
+              <GoalForm />
+            </section>
 
             {/* Tip History */}
             <section>

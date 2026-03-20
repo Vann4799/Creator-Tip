@@ -6,6 +6,7 @@ import { FundraisingBar } from '@/components/FundraisingBar';
 import { NftShowcase } from '@/components/NftShowcase';
 import { TipForm } from '@/components/TipForm';
 import { TipFeed } from '@/components/TipFeed';
+import { SupportersFeed } from '@/components/SupportersFeed';
 import { Leaderboard } from '@/components/Leaderboard';
 
 interface PageProps {
@@ -42,6 +43,7 @@ export default async function CreatorPage({ params }: PageProps) {
 
           {/* Right Column: Feed + Leaderboard */}
           <div className="space-y-10">
+            <SupportersFeed walletAddress={creator.wallet_address} />
             <TipFeed username={username} />
             <Leaderboard username={username} />
           </div>
