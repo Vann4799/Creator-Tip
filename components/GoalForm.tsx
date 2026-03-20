@@ -68,13 +68,27 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
   const isWorking = isPending || isConfirming;
 
   return (
-    <div className="pixel-card p-6 bg-[#09090b]/80">
-      <h2 className="text-lg font-bold mb-4 uppercase tracking-widest flex items-center gap-2">
-        <span>🎯</span> Create On-Chain Goal
-      </h2>
-      <p className="text-xs text-white/50 mb-6 leading-relaxed">
-        Set up a verifiable fundraising goal via Smart Contract. Funds go directly to your wallet instantly when tipped.
-      </p>
+    <div className="pixel-card relative overflow-hidden bg-[#09090b]/80">
+      
+      {/* COMING SOON OVERLAY */}
+      <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[4px]">
+        <div className="bg-[#3D5AFE] text-white px-6 py-3 border border-white/20 shadow-2xl skew-x-[-10deg]">
+          <h3 className="text-sm md:text-base font-bold uppercase tracking-[0.2em] skew-x-[10deg]">
+            🚀 New Feature Soon !!
+          </h3>
+        </div>
+        <p className="mt-3 text-[10px] text-white/70 uppercase tracking-widest bg-black/50 px-3 py-1">
+          Deploying Smart Contracts...
+        </p>
+      </div>
+
+      <div className="p-6 opacity-40 pointer-events-none select-none">
+        <h2 className="text-lg font-bold mb-4 uppercase tracking-widest flex items-center gap-2">
+          <span>🎯</span> Create On-Chain Goal
+        </h2>
+        <p className="text-xs text-white/50 mb-6 leading-relaxed">
+          Set up a verifiable fundraising goal via Smart Contract. Funds go directly to your wallet instantly when tipped.
+        </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -139,19 +153,13 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
 
         <button 
           type="submit" 
-          disabled={isWorking}
+          disabled={true}
           className="w-full btn-primary py-3 px-4 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
         >
-          {isWorking ? (
-            <>
-              <Loader2 className="animate-spin" size={16} />
-              {isPending ? 'Confirm in Wallet...' : 'Waiting for Mined Tx...'}
-            </>
-          ) : (
-            '🚀 Launch Goal Contract'
-          )}
+          🚀 Launch Goal Contract
         </button>
       </form>
+      </div>
     </div>
   );
 }
