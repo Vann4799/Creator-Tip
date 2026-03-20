@@ -22,26 +22,36 @@ export function NftShowcase({ address }: { address: string }) {
     const fetchNFTs = async () => {
       try {
         setLoading(true);
-        // Using Alchemy's demo key for mainnet NFTs.
-        // Replace 'demo' with an actual Alchemy API Key for production use.
-        const url = `https://eth-mainnet.g.alchemy.com/nft/v3/demo/getNFTsForOwner?owner=${address}&withMetadata=true&pageSize=6`;
-        const res = await fetch(url);
+        // We'll scan ETH, Polygon, and Arbitrum since many users hold test/OAT NFTs there
+        const chains = ['eth-mainnet', 'polygon-mainnet', 'arb-mainnet'];
         
-        if (!res.ok) {
-          throw new Error('Failed to fetch NFTs');
-        }
+        const fetchPromises = chains.map(chain => 
+          fetch(`https://${chain}.g.alchemy.com/nft/v3/demo/getNFTsForOwner?owner=${address}&withMetadata=true&pageSize=10`)
+            .then(res => {
+              if (!res.ok) throw new Error(`Failed to fetch from ${chain}`);
+              return res.json();
+            })
+        );
 
-        const data = await res.json();
-        
-        // Filter out NFTs without images
-        const validNfts = (data.ownedNfts || []).filter((nft: any) => 
+        const results = await Promise.allSettled(fetchPromises);
+        let allNfts: any[] = [];
+
+        results.forEach(result => {
+          if (result.status === 'fulfilled' && result.value.ownedNfts) {
+            allNfts = [...allNfts, ...result.value.ownedNfts];
+          }
+        });
+
+        // Filter valid ones with images
+        const validNfts = allNfts.filter((nft: any) => 
           nft.image && (nft.image.cachedUrl || nft.image.thumbnailUrl || nft.image.originalUrl)
         );
 
-        setNfts(validNfts);
+        // Sort roughly or just take the first 6
+        setNfts(validNfts.slice(0, 6));
       } catch (err: any) {
         console.error("Error fetching NFTs:", err);
-        setError('No public NFTs found on Ethereum Mainnet.');
+        setError('No public NFTs found.');
       } finally {
         setLoading(false);
       }
@@ -62,7 +72,7 @@ export function NftShowcase({ address }: { address: string }) {
     return (
       <div className="pixel-card p-6 flex flex-col items-center justify-center gap-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
         <p className="text-xs tracking-wider uppercase text-white/40 font-mono flex items-center gap-2">
-          <span>🖼️</span> No Mainnet NFTs Found
+          <span>🖼️</span> No Multi-Chain NFTs Found
         </p>
       </div>
     );

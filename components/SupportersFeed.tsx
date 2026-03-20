@@ -1,10 +1,13 @@
 'use client';
 
-import { useReadContract } from 'wagmi';
+import { useReadContract, useAccount } from 'wagmi';
 import { formatEther } from 'viem';
 import { TIP_GOAL_ABI, TIP_GOAL_ADDRESS } from '@/lib/abi';
+import { getNativeSymbol } from '@/lib/chains';
 
 export function SupportersFeed({ walletAddress }: { walletAddress: string }) {
+  const { chain } = useAccount();
+  const tokenSymbol = getNativeSymbol(chain?.id);
   const { data: tips, isLoading, isError } = useReadContract({
     address: TIP_GOAL_ADDRESS as `0x${string}`,
     abi: TIP_GOAL_ABI,
@@ -14,6 +17,15 @@ export function SupportersFeed({ walletAddress }: { walletAddress: string }) {
       refetchInterval: 5000, 
     }
   });
+
+  if (TIP_GOAL_ADDRESS === '0x0000000000000000000000000000000000000000') {
+    return (
+      <div className="pixel-card p-6 text-center" style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <p className="text-[10px] text-white/40 tracking-widest uppercase mb-1">CONTRACT NOT DEPLOYED YET</p>
+        <p className="text-[9px] text-white/20 tracking-widest uppercase">No on-chain supporters.</p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -55,7 +67,7 @@ export function SupportersFeed({ walletAddress }: { walletAddress: string }) {
                 <p className="text-[10px] text-white/50">{date.toLocaleDateString()} {date.toLocaleTimeString()}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-mono font-bold">{formatEther(tip.amount)} ETH</p>
+                <p className="text-sm font-mono font-bold">{formatEther(tip.amount)} {tokenSymbol}</p>
               </div>
             </div>
           );
