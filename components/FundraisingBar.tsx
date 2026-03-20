@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { formatEther, parseEther } from 'viem';
 import { TIP_GOAL_ABI, TIP_GOAL_ADDRESS } from '@/lib/abi';
 import { Loader2 } from 'lucide-react';
 
 export function FundraisingBar({ walletAddress, goalTitle }: { walletAddress: string; goalTitle: string | null }) {
+  const { chain } = useAccount();
+  const tokenSymbol = chain?.nativeCurrency?.symbol || 'ETH';
+  
   const [reached, setReached] = useState(false);
 
   // Read the goal structure
@@ -78,7 +81,7 @@ export function FundraisingBar({ walletAddress, goalTitle }: { walletAddress: st
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold tracking-wider">{displayTitle}</h3>
         <span className="text-[10px] font-mono tracking-widest uppercase text-white/50">
-          Target: {isActive ? targetEth.toFixed(4) : '—'} ETH
+          Target: {isActive ? targetEth.toFixed(4) : '—'} {tokenSymbol}
         </span>
       </div>
 
@@ -105,7 +108,7 @@ export function FundraisingBar({ walletAddress, goalTitle }: { walletAddress: st
 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none mix-blend-difference text-white">
               <span className="text-xs font-bold tracking-widest uppercase">
-                {percentage.toFixed(1)}% ({currentEth.toFixed(4)} ETH)
+                {percentage.toFixed(1)}% ({currentEth.toFixed(4)} {tokenSymbol})
               </span>
             </div>
           </div>

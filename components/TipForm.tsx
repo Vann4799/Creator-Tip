@@ -21,8 +21,11 @@ const INPUT_STYLE = { background: 'rgba(255,255,255,0.07)', border: '1.5px solid
 interface TipFormProps { creator: Creator; onTipSuccess?: () => void; }
 
 export function TipForm({ creator, onTipSuccess }: TipFormProps) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const chainId = useChainId();
+  const tokenSymbol = chain?.nativeCurrency?.symbol || 'ETH';
+  const blockExplorerUrl = chain?.blockExplorers?.default?.url || 'https://etherscan.io';
+  
   const [amount, setAmount] = useState('0.001');
   const [customAmount, setCustomAmount] = useState('');
   const [message, setMessage] = useState('');
@@ -73,7 +76,7 @@ export function TipForm({ creator, onTipSuccess }: TipFormProps) {
               ...{ background: selectedPreset === p.value ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)', border: selectedPreset === p.value ? '1.5px solid rgba(255,255,255,0.7)' : '1.5px solid rgba(255,255,255,0.25)', borderRadius: 0 },
               color: selectedPreset === p.value ? '#fff' : 'rgba(255,255,255,0.5)',
             }}>
-            {p.label} ETH
+            {p.label} {tokenSymbol}
           </button>
         ))}
       </div>
@@ -81,10 +84,10 @@ export function TipForm({ creator, onTipSuccess }: TipFormProps) {
       {/* Custom */}
       <div className="flex items-center gap-2" style={{ ...INPUT_STYLE, padding: 0 }}>
         <span className="px-3 py-2.5 text-xs" style={{ color: 'rgba(255,255,255,0.35)', borderRight: '1px solid rgba(255,255,255,0.2)' }}>Custom:</span>
-        <input type="number" placeholder="0.00" step="0.001" min="0.001" value={customAmount}
+        <input type="number" placeholder="0.00" step="0.0001" min="0.0001" value={customAmount}
           onChange={(e) => handleCustom(e.target.value)}
           style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontFamily: 'inherit', fontSize: '13px', padding: '10px 0' }} />
-        <span className="px-3 text-xs font-bold" style={{ color: 'rgba(255,255,255,0.35)' }}>ETH</span>
+        <span className="px-3 text-xs font-bold" style={{ color: 'rgba(255,255,255,0.35)' }}>{tokenSymbol}</span>
       </div>
 
       {/* Message */}
@@ -103,7 +106,7 @@ export function TipForm({ creator, onTipSuccess }: TipFormProps) {
       {status === 'success' && (
         <div style={{ ...CARD, borderColor: 'rgba(74,222,128,0.5)' }} className="p-3 text-xs text-green-300 text-center space-y-1">
           <div className="font-bold">✓ Tip sent successfully!</div>
-          {txHash && <a href={`https://etherscan.io/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="hover:underline break-all" style={{ color: 'rgba(74,222,128,0.65)', display: 'block' }}>{txHash.slice(0, 20)}...{txHash.slice(-8)}</a>}
+          {txHash && <a href={`${blockExplorerUrl}/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="hover:underline break-all" style={{ color: 'rgba(74,222,128,0.65)', display: 'block' }}>{txHash.slice(0, 20)}...{txHash.slice(-8)}</a>}
         </div>
       )}
       {status === 'error' && (
@@ -122,7 +125,7 @@ export function TipForm({ creator, onTipSuccess }: TipFormProps) {
       ) : (
         <button onClick={handleTip} disabled={status === 'pending'}
           className="btn-primary w-full py-4 text-xs uppercase tracking-wider disabled:opacity-50">
-          {status === 'pending' ? 'Processing...' : `→ Send ${finalAmount} ETH`}
+          {status === 'pending' ? 'Processing...' : `→ Send ${finalAmount} ${tokenSymbol}`}
         </button>
       )}
     </div>
