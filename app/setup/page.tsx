@@ -205,7 +205,7 @@ export default function SetupPage() {
                 </span>
                 <input
                   type="text"
-                  placeholder="vann4799"
+                  placeholder="satoshi_dev"
                   value={form.username}
                   onChange={(e) => setForm((f) => ({ ...f, username: e.target.value.toLowerCase() }))}
                   className="flex-1 bg-transparent px-4 py-3 text-sm outline-none font-medium"
@@ -223,7 +223,7 @@ export default function SetupPage() {
               </label>
               <input
                 type="text"
-                placeholder="Vann Exmachina"
+                placeholder="Your Full Name or Alias"
                 value={form.name}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                 className="w-full pixel-input px-4 py-3 text-sm font-medium"
