@@ -206,12 +206,13 @@ export function AsciiGlobe() {
       ctx.textBaseline = 'middle';
 
       const hoverColorBoost = 1 + currentGlowIntensity * 0.6; // brighten chars on hover
+      const scaleFont = Math.min(1, W / 500); // Scale down text on mobile
 
       for (const p of all) {
         const d = Math.abs(p.z); // depth: 0=edge, 1=center
 
         if (p.front) {
-          const sz = Math.round(10 + d * 9); // 10–19px front
+          const sz = Math.max(4, Math.round((10 + d * 9) * scaleFont)); // 10–19px front standard
           ctx.font = `${sz}px monospace`;
 
           if (p.land) {
@@ -224,7 +225,7 @@ export function AsciiGlobe() {
             ctx.fillText('○', p.sx, p.sy);
           }
         } else {
-          const sz = Math.round(7 + d * 5); // 7–12px back
+          const sz = Math.max(3, Math.round((7 + d * 5) * scaleFont)); // 7–12px back standard
           ctx.font = `${sz}px monospace`;
 
           if (p.land) {
