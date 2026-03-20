@@ -21,17 +21,56 @@ interface WalletStats {
   healthColor: string;
 }
 
-// Pixel-art palette for tokens
+// High-contrast neon palette (pops against blue background)
 const TOKEN_COLORS = [
-  '#627EEA', // ETH blue
-  '#F7931A', // BTC orange
-  '#8247E5', // Polygon purple
-  '#00D395', // Green
-  '#FF6B6B', // Red
-  '#FFD93D', // Yellow
-  '#6BCB77', // Lime
-  '#4D96FF', // Sky
+  '#FF6B00', // Neon Orange
+  '#FF2D78', // Hot Pink
+  '#00FFD1', // Cyan Mint
+  '#FFE600', // Electric Yellow
+  '#B24BF3', // Vivid Purple
+  '#00FF6A', // Lime Green
+  '#FF4545', // Vivid Red
+  '#00B4FF', // Ice Blue
 ];
+
+// CoinGecko ID lookup by common token symbols
+const COINGECKO_IDS: Record<string, string> = {
+  ETH: 'ethereum',
+  BNB: 'binancecoin',
+  MATIC: 'matic-network',
+  POL: 'matic-network',
+  ARB: 'arbitrum',
+  OP: 'optimism',
+  USDC: 'usd-coin',
+  USDT: 'tether',
+  DAI: 'dai',
+  WETH: 'weth',
+  WBTC: 'wrapped-bitcoin',
+  LINK: 'chainlink',
+  UNI: 'uniswap',
+  AAVE: 'aave',
+  CAKE: 'pancakeswap-token',
+};
+
+async function fetchPricesUSD(symbols: string[]): Promise<Record<string, number>> {
+  const ids = [...new Set(symbols.map(s => COINGECKO_IDS[s.toUpperCase()]).filter(Boolean))];
+  if (ids.length === 0) return {};
+  try {
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=usd`,
+      { next: { revalidate: 60 } }
+    );
+    const data = await res.json();
+    const priceMap: Record<string, number> = {};
+    symbols.forEach(sym => {
+      const id = COINGECKO_IDS[sym.toUpperCase()];
+      if (id && data[id]?.usd) priceMap[sym.toUpperCase()] = data[id].usd;
+    });
+    return priceMap;
+  } catch {
+    return {};
+  }
+}
 
 function DonutChart({ tokens, total }: { tokens: TokenBalance[]; total: number }) {
   const size = 160;
@@ -73,25 +112,34 @@ function DonutChart({ tokens, total }: { tokens: TokenBalance[]; total: number }
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {/* Background circle */}
+      <circle cx={cx} cy={cy} r={r + 4} fill="rgba(0,0,0,0.35)" />
       {segments.map((seg, i) => (
         <path
           key={i}
           d={seg.d}
           fill={seg.color}
-          opacity={0.9}
-          stroke="rgba(0,0,0,0.3)"
-          strokeWidth={1}
-          style={{ transition: 'opacity 0.2s' }}
+          opacity={1}
+          stroke="#000"
+          strokeWidth={2.5}
         />
       ))}
       {/* Center hole */}
-      <circle cx={cx} cy={cy} r={innerR - 2} fill="rgba(0,0,0,0.5)" />
-      <text x={cx} y={cy - 6} textAnchor="middle" fill="white" fontSize="11" fontWeight="700" fontFamily="monospace">
-        ${total >= 1000 ? `${(total / 1000).toFixed(1)}K` : total.toFixed(0)}
-      </text>
-      <text x={cx} y={cy + 10} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="7" fontFamily="monospace" textDecoration="uppercase">
-        TOTAL
-      </text>
+      <circle cx={cx} cy={cy} r={innerR - 1} fill="#0a0a1a" />
+      {total > 0 ? (
+        <>
+          <text x={cx} y={cy - 7} textAnchor="middle" fill="white" fontSize="12" fontWeight="700" fontFamily="monospace">
+            ${total >= 1000 ? `${(total / 1000).toFixed(1)}K` : total.toFixed(0)}
+          </text>
+          <text x={cx} y={cy + 8} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="7" fontFamily="monospace">
+            USD VALUE
+          </text>
+        </>
+      ) : (
+        <text x={cx} y={cy + 4} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="8" fontFamily="monospace">
+          HOLDINGS
+        </text>
+      )}
     </svg>
   );
 }
@@ -168,14 +216,16 @@ export function WalletOverview() {
 
         // Parse token balances
         const rawTokens: TokenBalance[] = [];
+        const allSymbols: string[] = [];
 
         // Add native token first
         if (nativeBal) {
+          allSymbols.push(nativeBal.symbol.toUpperCase());
           rawTokens.push({
             symbol: nativeBal.symbol,
             name: nativeBal.symbol,
             balance: parseFloat(nativeBal.formatted),
-            usdValue: parseFloat(nativeBal.formatted) * 2500, // rough estimate
+            usdValue: 0, // filled after price fetch
             color: TOKEN_COLORS[0],
           });
         }
@@ -213,11 +263,19 @@ export function WalletOverview() {
               symbol: meta.symbol,
               name: meta.name || meta.symbol,
               balance,
-              usdValue: balance * 1, // placeholder — no price oracle in demo
+              usdValue: 0, // filled after price fetch
               color: TOKEN_COLORS[(i + 1) % TOKEN_COLORS.length],
             });
+            allSymbols.push(meta.symbol.toUpperCase());
           }
         }
+
+        // Fetch real USD prices from CoinGecko
+        const priceMap = await fetchPricesUSD(allSymbols);
+        rawTokens.forEach(t => {
+          const price = priceMap[t.symbol.toUpperCase()] || 0;
+          t.usdValue = t.balance * price;
+        });
 
         // Wallet age
         let firstTxDate: Date | null = null;
