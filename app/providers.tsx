@@ -9,18 +9,18 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  sepolia,
-  baseSepolia,
-  optimismSepolia,
-  arbitrumSepolia,
-  polygonAmoy,
+  mainnet,
+  base,
+  optimism,
+  arbitrum,
+  polygon,
 } from 'wagmi/chains';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 const config = getDefaultConfig({
   appName: 'Creator Tip',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
-  chains: [sepolia, baseSepolia, optimismSepolia, arbitrumSepolia, polygonAmoy],
+  chains: [mainnet, base, optimism, arbitrum, polygon],
   ssr: true,
 });
 
