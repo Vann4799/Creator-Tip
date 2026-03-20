@@ -18,6 +18,7 @@ export interface Creator {
   linkedin: string | null;
   website: string | null;
   theme_color: string | null;
+  goal_title: string | null;
   created_at: string;
 }
 

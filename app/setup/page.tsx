@@ -27,6 +27,7 @@ export default function SetupPage() {
     linkedin: '',
     website: '',
     theme_color: '#3D5AFE',
+    goal_title: '',
   });
 
   // Load existing profile
@@ -51,6 +52,7 @@ export default function SetupPage() {
             linkedin: data.linkedin || '',
             website: data.website || '',
             theme_color: data.theme_color || '#3D5AFE',
+            goal_title: data.goal_title || '',
           });
         }
         setLoading(false);
@@ -111,6 +113,7 @@ export default function SetupPage() {
         linkedin: form.linkedin || null,
         website: form.website || null,
         theme_color: form.theme_color || '#3D5AFE',
+        goal_title: form.goal_title || null,
       },
       { onConflict: 'wallet_address' }
     );
@@ -239,6 +242,26 @@ export default function SetupPage() {
                 rows={3}
                 className="w-full resize-none pixel-input px-4 py-3 text-sm font-light leading-relaxed"
               />
+            </div>
+
+            {/* Goal Tracking */}
+            <div className="pixel-card p-6 space-y-4 bg-black/20">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">Fundraising Goal (Web3)</p>
+              <div>
+                <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/50">
+                  Goal Objective / Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="Need 1 ETH for a new Mic 🎙️"
+                  value={form.goal_title}
+                  onChange={(e) => setForm((f) => ({ ...f, goal_title: e.target.value }))}
+                  className="w-full pixel-input px-4 py-3 text-sm font-medium"
+                />
+                <p className="mt-2 text-[10px] text-white/30 uppercase tracking-widest">
+                  Target amount and progress will be managed by Smart Contract directly.
+                </p>
+              </div>
             </div>
 
             {/* Custom Theme Color */}

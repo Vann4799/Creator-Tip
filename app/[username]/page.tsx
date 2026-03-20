@@ -2,6 +2,7 @@ import { supabase, Creator } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { CreatorCard } from '@/components/CreatorCard';
+import { FundraisingBar } from '@/components/FundraisingBar';
 import { NftShowcase } from '@/components/NftShowcase';
 import { TipForm } from '@/components/TipForm';
 import { TipFeed } from '@/components/TipFeed';
@@ -34,6 +35,7 @@ export default async function CreatorPage({ params }: PageProps) {
           {/* Left Column: Creator Card + Tip Form */}
           <div className="space-y-6">
             <CreatorCard creator={creator as Creator} />
+            <FundraisingBar walletAddress={creator.wallet_address} goalTitle={creator.goal_title} />
             <NftShowcase address={creator.wallet_address} />
             <TipForm creator={creator as Creator} />
           </div>
