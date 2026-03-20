@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase, Tip } from '@/lib/supabase';
+import { getNativeSymbol } from '@/lib/chains';
 
 const CARD = { background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.35)', borderRadius: 0 };
 const CARD_SM = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 0 };
@@ -44,7 +45,7 @@ export function TipHistory({ walletAddress }: { walletAddress: string }) {
       <div style={CARD} className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <p className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ color: 'rgba(255,255,255,0.35)' }}>Total Received</p>
-          <p className="text-3xl font-bold mt-1">{total.toFixed(4)} ETH</p>
+          <p className="text-3xl font-bold mt-1">{total.toFixed(4)} <span className="text-sm text-white/50">UNITS</span></p>
         </div>
         <div className="sm:text-right">
           <p className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ color: 'rgba(255,255,255,0.35)' }}>Total Tips</p>
@@ -84,7 +85,7 @@ export function TipHistory({ walletAddress }: { walletAddress: string }) {
                     {tip.chain_name}
                   </span>
                 </td>
-                <td style={{ ...TD_STYLE, fontWeight: 700, whiteSpace: 'nowrap' }}>+{tip.amount_eth} ETH</td>
+                <td style={{ ...TD_STYLE, fontWeight: 700, whiteSpace: 'nowrap' }}>+{tip.amount_eth} {getNativeSymbol(tip.chain_id)}</td>
                 <td style={{ ...TD_STYLE, color: 'rgba(255,255,255,0.5)', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {tip.message || '—'}
                 </td>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase, Tip } from '@/lib/supabase';
+import { getNativeSymbol } from '@/lib/chains';
 
 const CARD = { background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.35)', borderRadius: 0 };
 const CARD_SM = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 0 };
@@ -69,7 +70,7 @@ export function TipFeed({ username }: { username: string }) {
                 {tip.message && <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>{tip.message}</p>}
               </div>
               <div className="shrink-0 text-right">
-                <div className="text-sm font-bold">+{tip.amount_eth} ETH</div>
+                <div className="text-sm font-bold">+{tip.amount_eth} {getNativeSymbol(tip.chain_id)}</div>
                 <div className="text-[9px] uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.3)' }}>{timeAgo(tip.created_at)}</div>
               </div>
             </div>
