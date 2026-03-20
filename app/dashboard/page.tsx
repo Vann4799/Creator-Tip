@@ -8,6 +8,7 @@ import { Navbar } from '@/components/Navbar';
 import { TipHistory } from '@/components/TipHistory';
 import { Leaderboard } from '@/components/Leaderboard';
 import { GoalForm } from '@/components/GoalForm';
+import { WalletOverview } from '@/components/WalletOverview';
 import { supabase, Creator } from '@/lib/supabase';
 
 export default function DashboardPage() {
@@ -105,6 +106,11 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
+
+            {/* Wallet Overview */}
+            <section>
+              <WalletOverview />
+            </section>
 
             {/* Smart Contract Goal Form */}
             <section className="max-w-xl">
