@@ -56,9 +56,12 @@ export function TipFeed({ username }: { username: string }) {
         {tips.map((tip, idx) => (
           <div key={tip.id} style={{ ...CARD, ...(idx === 0 ? { background: 'rgba(255,255,255,0.14)', borderColor: 'rgba(255,255,255,0.55)' } : {}) }} className="p-4">
             <div className="flex items-start justify-between gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center text-[10px] font-bold"
-                style={{ ...CARD_SM }}>
-                {tip.from_address.slice(2, 4).toUpperCase()}
+              <div className="flex shrink-0 overflow-hidden" style={{ ...CARD_SM, width: 36, height: 36 }}>
+                <img 
+                  src={`https://api.dicebear.com/7.x/pixel-art/svg?seed=${tip.from_address}`} 
+                  alt="avatar" 
+                  className="w-full h-full object-cover" 
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -67,7 +70,11 @@ export function TipFeed({ username }: { username: string }) {
                     {tip.chain_name}
                   </span>
                 </div>
-                {tip.message && <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>{tip.message}</p>}
+                {tip.message && (
+                  <p className="text-[11px] mt-2 leading-relaxed break-all whitespace-pre-wrap" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                    {tip.message}
+                  </p>
+                )}
               </div>
               <div className="shrink-0 text-right">
                 <div className="text-sm font-bold">+{tip.amount_eth} {getNativeSymbol(tip.chain_id)}</div>
