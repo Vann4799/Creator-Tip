@@ -15,6 +15,7 @@ export interface Creator {
   avatar_url: string | null;
   twitter: string | null;
   github: string | null;
+  linkedin: string | null;
   website: string | null;
   created_at: string;
 }
