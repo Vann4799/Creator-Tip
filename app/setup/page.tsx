@@ -151,7 +151,7 @@ export default function SetupPage() {
           <p className="mt-3 text-sm font-light" style={{ color: 'rgba(255,255,255,0.55)' }}>
             Your public tip page will be live at{' '}
             <span className="font-medium" style={{ color: '#9df0ff' }}>
-              yourdomain.com/{form.username || 'username'}
+              creator-tip.vercel.app/{form.username || 'your-username'}
             </span>
           </p>
         </div>
@@ -201,7 +201,7 @@ export default function SetupPage() {
               </label>
               <div className="flex items-center gap-0 overflow-hidden pixel-input">
                 <span className="px-4 py-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)', borderRight: '2px solid rgba(255,255,255,0.15)' }}>
-                  yourdomain.com/
+                  creator-tip.vercel.app/
                 </span>
                 <input
                   type="text"
@@ -223,7 +223,7 @@ export default function SetupPage() {
               </label>
               <input
                 type="text"
-                placeholder="Vann Exmachina"
+                placeholder="e.g. Vann D'Law"
                 value={form.name}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                 className="w-full pixel-input px-4 py-3 text-sm font-medium"
