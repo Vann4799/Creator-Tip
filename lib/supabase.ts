@@ -17,6 +17,7 @@ export interface Creator {
   github: string | null;
   linkedin: string | null;
   website: string | null;
+  theme_color: string | null;
   created_at: string;
 }
 

@@ -1,6 +1,9 @@
 'use client';
 
 import { Creator } from '@/lib/supabase';
+import { useState, useEffect } from 'react';
+import QRCode from 'react-qr-code';
+import { Share2, X as CloseIcon, Copy, Twitter } from 'lucide-react';
 
 const CARD = { background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.35)', borderRadius: 0 };
 const CARD_SM = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 0 };
@@ -10,8 +13,61 @@ function truncateAddress(addr: string) {
 }
 
 export function CreatorCard({ creator }: { creator: Creator }) {
+  const [showShare, setShowShare] = useState(false);
+  const [pageUrl, setPageUrl] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    setPageUrl(window.location.href);
+  }, []);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(pageUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareText = `Support ${creator.name || `@${creator.username}`} via crypto instantly! ⚡`;
+
   return (
     <div style={CARD} className="relative overflow-hidden p-8">
+      {/* Share Modal Overlay */}
+      {showShare && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#3D5AFE]/95 backdrop-blur-sm p-6 animate-in fade-in duration-200">
+          <button onClick={() => setShowShare(false)} className="absolute top-4 right-4 text-white/70 hover:text-white">
+            <CloseIcon size={24} />
+          </button>
+          
+          <h2 className="text-lg font-bold mb-6 tracking-tight">Share Profile</h2>
+          
+          <div className="bg-white p-4 mb-6" style={{ borderRadius: 0 }}>
+            <QRCode value={pageUrl || 'https://creator-tip.vercel.app'} size={140} />
+          </div>
+
+          <div className="flex w-full gap-2 mb-4">
+            <button onClick={handleCopy} className="flex-1 pixel-card flex items-center justify-center gap-2 py-3 hover:bg-white/10 transition-colors text-sm">
+              <Copy size={16} />
+              {copied ? 'Copied!' : 'Copy Link'}
+            </button>
+          </div>
+
+          <div className="flex w-full gap-2 relative z-[60]">
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`} 
+               target="_blank" rel="noopener noreferrer"
+               className="flex-1 pixel-card flex items-center justify-center gap-2 py-3 hover:bg-white/10 transition-colors text-sm bg-black/20">
+              <Twitter size={16} />
+              Twitter
+            </a>
+            <a href={`https://warpcast.com/~/compose?text=${encodeURIComponent(shareText)}&embeds[]=${encodeURIComponent(pageUrl)}`} 
+               target="_blank" rel="noopener noreferrer"
+               className="flex-1 pixel-card flex items-center justify-center gap-2 py-3 hover:bg-white/10 transition-colors text-sm bg-[#8a63d2]/20">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.24 3H5.76C4.24 3 3 4.24 3 5.76v12.48C3 19.76 4.24 21 5.76 21h12.48C19.76 21 21 19.76 21 18.24V5.76C21 4.24 19.76 3 18.24 3Zm-2.6 12.8a.65.65 0 0 1-.65.65h-6.8a.65.65 0 0 1-.65-.65V15h8.1v.8Zm.5-2.2a.65.65 0 0 1-.65.65h-7.8a.65.65 0 0 1-.65-.65V9.45c0-.36.29-.65.65-.65h7.8c.36 0 .65.29.65.65V13.6Z"/></svg>
+              Farcaster
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center gap-4 text-center">
         {/* Avatar */}
         <div className="relative">
@@ -78,8 +134,15 @@ export function CreatorCard({ creator }: { creator: Creator }) {
           )}
         </div>
 
-        <div className="px-4 py-1.5 text-xs" style={{ ...CARD_SM, color: 'rgba(255,255,255,0.35)' }}>
-          {truncateAddress(creator.wallet_address)}
+        <div className="flex items-center gap-4 mt-2">
+          <div className="px-4 py-1.5 text-xs font-mono" style={{ ...CARD_SM, color: 'rgba(255,255,255,0.45)' }}>
+            {truncateAddress(creator.wallet_address)}
+          </div>
+          <button onClick={() => setShowShare(true)} 
+            className="p-1.5 text-white/50 hover:text-white transition-colors"
+            style={CARD_SM} title="Share Profile">
+            <Share2 size={16} />
+          </button>
         </div>
       </div>
     </div>

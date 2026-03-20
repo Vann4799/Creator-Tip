@@ -2,6 +2,7 @@ import { supabase, Creator } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { CreatorCard } from '@/components/CreatorCard';
+import { NftShowcase } from '@/components/NftShowcase';
 import { TipForm } from '@/components/TipForm';
 import { TipFeed } from '@/components/TipFeed';
 import { Leaderboard } from '@/components/Leaderboard';
@@ -24,7 +25,7 @@ export default async function CreatorPage({ params }: PageProps) {
   }
 
   return (
-    <main className="relative min-h-screen text-white overflow-hidden" style={{ background: '#3D5AFE' }}>
+    <main className="relative min-h-screen text-white overflow-hidden transition-colors duration-500" style={{ background: creator.theme_color || '#3D5AFE' }}>
 
       <Navbar />
 
@@ -33,6 +34,7 @@ export default async function CreatorPage({ params }: PageProps) {
           {/* Left Column: Creator Card + Tip Form */}
           <div className="space-y-6">
             <CreatorCard creator={creator as Creator} />
+            <NftShowcase address={creator.wallet_address} />
             <TipForm creator={creator as Creator} />
           </div>
 

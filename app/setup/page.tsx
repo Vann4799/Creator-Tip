@@ -26,6 +26,7 @@ export default function SetupPage() {
     github: '',
     linkedin: '',
     website: '',
+    theme_color: '#3D5AFE',
   });
 
   // Load existing profile
@@ -49,6 +50,7 @@ export default function SetupPage() {
             github: data.github || '',
             linkedin: data.linkedin || '',
             website: data.website || '',
+            theme_color: data.theme_color || '#3D5AFE',
           });
         }
         setLoading(false);
@@ -108,6 +110,7 @@ export default function SetupPage() {
         github: form.github || null,
         linkedin: form.linkedin || null,
         website: form.website || null,
+        theme_color: form.theme_color || '#3D5AFE',
       },
       { onConflict: 'wallet_address' }
     );
@@ -236,6 +239,30 @@ export default function SetupPage() {
                 rows={3}
                 className="w-full resize-none pixel-input px-4 py-3 text-sm font-light leading-relaxed"
               />
+            </div>
+
+            {/* Custom Theme Color */}
+            <div className="pixel-card p-6 space-y-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,0.35)' }}>Custom Theme</p>
+              <div className="flex items-center gap-4">
+                <input 
+                  type="color" 
+                  value={form.theme_color} 
+                  onChange={(e) => setForm(f => ({ ...f, theme_color: e.target.value }))}
+                  className="w-10 h-10 cursor-pointer border-0 bg-transparent p-0"
+                />
+                <span className="text-sm font-mono opacity-60 uppercase">{form.theme_color}</span>
+              </div>
+              <div className="flex gap-2">
+                {['#3D5AFE', '#09090b', '#052e16', '#4c0519', '#1e1b4b', '#171717'].map(color => (
+                  <button 
+                    key={color} type="button" 
+                    onClick={() => setForm(f => ({ ...f, theme_color: color }))}
+                    className="w-8 h-8 rounded-sm"
+                    style={{ backgroundColor: color, border: form.theme_color === color ? '2px solid white' : '1px solid rgba(255,255,255,0.2)' }}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* Social Links */}
