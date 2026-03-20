@@ -14,13 +14,14 @@ import {
   optimism,
   arbitrum,
   polygon,
+  bsc,
 } from 'wagmi/chains';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 const config = getDefaultConfig({
   appName: 'Creator Tip',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
-  chains: [mainnet, base, optimism, arbitrum, polygon],
+  chains: [mainnet, base, optimism, arbitrum, polygon, bsc],
   ssr: true,
 });
 
