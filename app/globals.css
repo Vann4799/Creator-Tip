@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg: #3B5BFF;
+  --fg: #ffffff;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════
+   PIXEL CARD — bold visible border, NO blur
+   ═══════════════════════════════════════ */
+.pixel-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 0;           /* Square pixel corners */
+  position: relative;
+}
+
+.pixel-card-sm {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0;
+}
+
+/* Hover state — brighter border */
+.pixel-card-hover {
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.pixel-card-hover:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Keep .glass-panel as alias so old code doesn't break */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 0;
+}
+
+/* Pixel input */
+.pixel-input {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  width: 100%;
+  display: block;
+}
+.pixel-input:focus {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.pixel-input::placeholder {
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* Pixel select */
+.glass-button {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  transition: all 0.15s ease;
+  color: #fff;
+  font-family: inherit;
+}
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+/* Primary white button */
+.btn-primary {
+  background: #ffffff;
+  color: var(--bg);
+  font-weight: 700;
+  border: 2px solid #ffffff;
+  border-radius: 0;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+.btn-primary:hover {
+  background: rgba(255,255,255,0.88);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Animated gradient text */
+.liquid-gradient-text {
+  background: linear-gradient(110deg, #ffffff 0%, #9df0ff 50%, #ffffff 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 5s linear infinite;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #2a3fc7; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 0; }
