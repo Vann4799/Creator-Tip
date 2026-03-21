@@ -245,35 +245,22 @@ export default function SetupPage() {
             </div>
 
             {/* Goal Tracking */}
-            <div className="pixel-card relative overflow-hidden bg-black/20">
-              
-              {/* COMING SOON OVERLAY */}
-              <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[4px]">
-                <div className="bg-[#3D5AFE] text-white px-6 py-2 border border-white/20 shadow-2xl skew-x-[-10deg]">
-                  <h3 className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] skew-x-[10deg]">
-                    🚀 New Feature Soon !!
-                  </h3>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-4 opacity-40 pointer-events-none select-none">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">Fundraising Goal (Web3)</p>
-                <div>
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-white/50">
-                    Goal Objective / Title
-                  </label>
-                  <input
-                    type="text"
-                    disabled
-                    placeholder="Need 1 ETH for a new Mic 🎙️"
-                    value={form.goal_title}
-                    onChange={(e) => setForm((f) => ({ ...f, goal_title: e.target.value }))}
-                    className="w-full pixel-input px-4 py-3 text-sm font-medium"
-                  />
-                  <p className="mt-2 text-[10px] text-white/30 uppercase tracking-widest">
-                    Target amount and progress will be managed by Smart Contract directly.
-                  </p>
-                </div>
+            <div className="pixel-card p-6 space-y-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,0.35)' }}>Fundraising Goal (On-chain)</p>
+              <div>
+                <label className="mb-2 block text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  Goal Objective / Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="Need 1 ETH for a new Mic 🎙️"
+                  value={form.goal_title}
+                  onChange={(e) => setForm((f) => ({ ...f, goal_title: e.target.value }))}
+                  className="w-full pixel-input px-4 py-3 text-sm font-medium"
+                />
+                <p className="mt-2 text-[10px] uppercase tracking-wider text-white/30">
+                  Target amount and progress will be managed by Smart Contract directly.
+                </p>
               </div>
             </div>
 
