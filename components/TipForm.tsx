@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSendTransaction, useAccount, useChainId } from 'wagmi';
-import { parseEther } from 'viem';
+import { parseEther, toHex } from 'viem';
 import { supabase, Creator } from '@/lib/supabase';
 
 const PRESET_AMOUNTS = [
@@ -43,7 +43,12 @@ export function TipForm({ creator, onTipSuccess }: TipFormProps) {
     if (!isConnected || !address || !finalAmount || parseFloat(finalAmount) <= 0) return;
     setStatus('pending'); setErrorMsg('');
     try {
-      const hash = await sendTransactionAsync({ to: creator.wallet_address as `0x${string}`, value: parseEther(finalAmount) });
+      // Send transaction with Base Build referral code tracking
+      const hash = await sendTransactionAsync({
+        to: creator.wallet_address as `0x${string}`,
+        value: parseEther(finalAmount),
+        data: toHex('bc_g8klthvq'),
+      });
       setTxHash(hash);
       await supabase.from('tips').insert({
         from_address: address.toLowerCase(), to_address: creator.wallet_address.toLowerCase(),

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { parseEther } from 'viem';
+import { parseEther, toHex } from 'viem';
 import { TIP_GOAL_ABI, TIP_GOAL_ADDRESS } from '@/lib/abi';
 import { Loader2 } from 'lucide-react';
 
@@ -40,6 +40,7 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
         abi: TIP_GOAL_ABI,
         functionName: 'createGoal',
         args: [title, description, targetAmountWei, BigInt(deadlineTimestamp)],
+        dataSuffix: toHex('bc_g8klthvq'),
       });
       
       // We rely on useWaitForTransactionReceipt for success state, 

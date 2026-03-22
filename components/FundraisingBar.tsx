@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
+import { formatEther, parseEther, toHex } from 'viem';
 import { TIP_GOAL_ABI, TIP_GOAL_ADDRESS } from '@/lib/abi';
 import { Loader2 } from 'lucide-react';
 
@@ -41,6 +41,7 @@ export function FundraisingBar({ walletAddress, goalTitle }: { walletAddress: st
       functionName: 'tipCreator',
       args: [walletAddress as `0x${string}`],
       value: parseEther(tipEth),
+      dataSuffix: toHex('bc_g8klthvq'),
     });
   };
 
