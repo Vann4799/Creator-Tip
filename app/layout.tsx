@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: 'Creator Tip — Support Your Favorite Creators with Crypto',
   description:
     'Send crypto tips directly to your favorite creators — no middleman, no platform fees. Like Saweria or Trakteer, but on the blockchain.',
+  other: {
+    'base:app_id': '69bfa0231465da0849435b55',
+  },
 };
 
 export default function RootLayout({
